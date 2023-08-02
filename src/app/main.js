@@ -59,6 +59,11 @@ class App {
 				NOTES.ARCHIVE_ID,
 				this.categoriesDataUpdate.bind(this)
 			);
+
+			note.events.subscribe(
+				NOTES.DELETE_ID,
+				this.categoriesDataReset.bind(this)
+			);
 		});
 	}
 

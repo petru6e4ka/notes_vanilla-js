@@ -23,6 +23,7 @@ export class Note {
 		}
 
 		this.archiveByIdInit();
+		this.deleteByIdInit();
 	}
 
 	render() {
@@ -67,6 +68,61 @@ export class Note {
 				status: 'error',
 				text: "Couldn't archive the note, please, try later",
 			});
+		}
+	}
+
+	deleteByIdInit() {
+		this.deleteButton = document.querySelector(
+			`[data-delete='${this.note.id}']`
+		);
+
+		if (this.deleteButton) {
+			this.deleteButton.addEventListener('click', this.onDeleteById.bind(this));
+		}
+	}
+
+	onDeleteById() {
+		try {
+			const updatedNotes = this.service.notes.deleteById(this.note.id);
+
+			this.events.emit(NOTES.DELETE_ID, updatedNotes);
+			this.notifications.render({
+				text: 'Deleted Note',
+			});
+			this.remove();
+			this.clear();
+		} catch (error) {
+			console.log(error);
+			this.notifications.render({
+				status: 'error',
+				text: "Couldn't archive the note, please, try later",
+			});
+		}
+	}
+
+	clear() {
+		this.note = null;
+		this.root = null;
+		this.isActive = null;
+		this.view = null;
+		this.service = null;
+		this.events = null;
+		this.notifications = null;
+
+		if (this.archiveButton) {
+			this.archiveButton.removeEventListener(
+				'click',
+				this.onArchiveById.bind(this)
+			);
+			this.archiveButton = null;
+		}
+
+		if (this.deleteButton) {
+			this.deleteButton.removeEventListener(
+				'click',
+				this.onDeleteById.bind(this)
+			);
+			this.deleteButton = null;
 		}
 	}
 }
