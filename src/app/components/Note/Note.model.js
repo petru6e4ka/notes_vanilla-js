@@ -1,12 +1,18 @@
 import { view } from './Note.view';
 
 export class Note {
-	constructor(note, root) {
+	constructor(note, root, isActive = true) {
 		this.note = note;
 		this.root = root;
-		this.view = view(this.note);
+		this.view = view(this.note, isActive);
 
-		this.render();
+		if (isActive && note.active) {
+			this.render();
+		}
+
+		if (!isActive && !note.active) {
+			this.render();
+		}
 	}
 
 	render() {
