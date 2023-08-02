@@ -40,6 +40,14 @@ let notesData = [
 		content: 'The lean startup',
 		active: true,
 	},
+	{
+		id: 6,
+		category: 'Task',
+		title: 'Books',
+		createdDate: new Date('05/17/2021').toISOString(),
+		content: 'The lean startup',
+		active: false,
+	},
 ];
 
 const categoriesData = [
