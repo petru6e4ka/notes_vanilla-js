@@ -1,0 +1,45 @@
+.table {
+	@include container;
+
+	display: flex;
+	flex-direction: column;
+
+	margin-top: 20px;
+	margin-bottom: 20px;
+
+	&__header {
+		display: flex;
+		align-items: center;
+
+		padding: 20px 15px;
+
+		font-weight: 700;
+
+		box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.1);
+	}
+
+	&__content {
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__col {
+		display: flex;
+
+		padding: 0 5px;
+
+		gap: 5px;
+
+		&--max {
+			flex: 1;
+		}
+
+		&--min {
+			width: 200px;
+		}
+	}
+
+	&__actions {
+		justify-content: flex-end;
+	}
+}

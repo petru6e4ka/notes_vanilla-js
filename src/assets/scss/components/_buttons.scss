@@ -1,0 +1,48 @@
+.button {
+	@include btn;
+
+	color: $white;
+
+	background-color: $ocean;
+
+	border: 1px solid $ocean;
+
+	&:hover {
+		color: $ocean;
+
+		background-color: $white;
+	}
+
+	&:disabled {
+		background-color: $soft-gray;
+		border-color: transparent;
+	}
+
+	&--outlined {
+		@include btn;
+
+		color: $ocean;
+
+		background-color: $white;
+
+		border: 1px solid $ocean;
+
+		&:hover {
+			color: $white;
+
+			background-color: $ocean;
+
+			border: 1px solid $ocean;
+		}
+	}
+
+	&--pulsed {
+		&:hover {
+			@include pulsed;
+		}
+	}
+
+	&--icon {
+		padding: 0;
+	}
+}

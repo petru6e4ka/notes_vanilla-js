@@ -1,0 +1,37 @@
+.note {
+	@include row;
+
+	margin-left: -2px;
+
+	border-left: 2px solid transparent;
+
+	&__name {
+		display: flex;
+		align-items: center;
+
+		color: $teal;
+	}
+
+	&__icon {
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+
+		width: 50px;
+		height: 50px;
+		margin-right: 8px;
+
+		color: $white;
+
+		border-radius: 50%;
+		background-color: $teal;
+	}
+
+	&__title {
+		font-weight: 700;
+	}
+
+	&--active {
+		border-left: 2px solid $ocean;
+	}
+}

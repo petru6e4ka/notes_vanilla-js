@@ -1,0 +1,31 @@
+.notification {
+	position: fixed;
+	top: 30px;
+	right: 30px;
+
+	display: flex;
+	align-items: center;
+	gap: 50px;
+	padding: 20px 30px;
+
+	color: $white;
+	font-weight: 700;
+
+	z-index: 1000;
+	background-color: $teal;
+	animation: disappear 3s linear;
+
+	&--error {
+		background-color: $alert;
+	}
+}
+
+@keyframes disappear {
+	0% {
+		opacity: 0.8;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}

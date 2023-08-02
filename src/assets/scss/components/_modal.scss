@@ -1,0 +1,74 @@
+.modal {
+	position: relative;
+
+	display: flex;
+	flex-direction: column-reverse;
+	max-height: 88vh;
+	margin: 0;
+
+	background-color: #fff;
+	transform: translateY(0);
+	transition: transform 0.5s ease;
+	transition-delay: 0.2s;
+
+	&__header {
+		position: relative;
+
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		padding: 25px;
+
+		color: $white;
+		text-transform: uppercase;
+		background-color: $ocean;
+	}
+
+	&__close {
+		position: absolute;
+		top: 50%;
+		right: 10px;
+
+		width: 40px;
+		height: 40px;
+
+		color: $white;
+
+		background-color: transparent;
+		border: none;
+		outline: none;
+		transform: translateY(-50%);
+	}
+}
+
+.overlay {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	height: 100%;
+	width: 100%;
+
+	background: rgba(0, 0, 0, 0.75);
+	transition: opacity 0.5s ease, visibility 0.5s ease;
+	z-index: 200;
+	opacity: 1;
+}
+
+.hidden {
+	.overlay {
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.modal {
+		transform: translateY(100%);
+	}
+}
