@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Notes</title>
+		<link rel="icon" href="/images/icons/list.png" type="image/png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+			integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
+		<link rel="stylesheet" href="/bundle.css" />
+	</head>
+	<body>
+		<main class="main">
+			<section class="table">
+				<header class="table__header">
+					<div class="table__col table__col--min">Name</div>
+					<div class="table__col table__col--min">Created</div>
+					<div class="table__col table__col--min">Category</div>
+					<div class="table__col table__col--max">Content</div>
+					<div class="table__col table__col--min">Dates</div>
+					<div class="table__col table__col--min table__actions">
+						<button class="button button--icon" data-archive="all">
+							<i class="fa-solid fa-download"></i>
+						</button>
+						<button class="button button--icon" data-delete="all">
+							<i class="fa-solid fa-trash"></i>
+						</button>
+					</div>
+				</header>
+				<div class="table__content" id="notes"></div>
+			</section>
+			<div class="container">
+				<button class="button button--pulsed" data-new="note">
+					Create Note
+				</button>
+			</div>
+
+			<section class="table">
+				<header class="table__header">
+					<div class="table__col table__col--max">Note Category</div>
+					<div class="table__col table__col--max">Active</div>
+					<div class="table__col table__col--max">Archived</div>
+				</header>
+				<div class="table__content" id="categories">
+					<article class="category">
+						<div class="category__name table__col table__col--max">
+							<div class="category__icon">Icon</div>
+							<div class="category__title">Task</div>
+						</div>
+						<div class="category__active table__col table__col--max">13</div>
+						<div class="category__archived table__col table__col--max">4</div>
+					</article>
+				</div>
+			</section>
+
+			<div id="portal" class="hidden">
+				<div class="overlay" id="modal_overlay">
+					<div class="modal" id="modal">
+						<div class="modal__content" id="portal-content">
+							<form action="#" class="add-form" id="new-note-form">
+								<div class="form__field">
+									<input
+										type="text"
+										name="title"
+										id="new-name"
+										class="form__input"
+										placeholder="Title"
+									/>
+								</div>
+								<div class="form__field">
+									<textarea
+										id="new-content"
+										name="content"
+										rows="5"
+										cols="50"
+										class="form__area"
+										placeholder="Content"
+									></textarea>
+								</div>
+
+								<div class="form__field">
+									<label for="new-task" class="form__radio-label">
+										<input
+											type="radio"
+											name="category"
+											id="new-task"
+											value="Task"
+										/>
+										Task
+									</label>
+
+									<label for="new-thought" class="form__radio-label">
+										<input
+											type="radio"
+											name="category"
+											id="new-thought"
+											value="Random thought"
+										/>
+										Random thought
+									</label>
+
+									<label for="new-idea" class="form__radio-label">
+										<input
+											type="radio"
+											name="category"
+											id="new-idea"
+											value="Idea"
+										/>
+										Idea
+									</label>
+
+									<label for="new-quote" class="form__radio-label">
+										<input
+											type="radio"
+											name="category"
+											id="new-quote"
+											value="Quote"
+										/>
+										Quote
+									</label>
+								</div>
+								<button class="button form__submit" type="submit">Save</button>
+							</form>
+						</div>
+						<div class="modal__header">
+							<h2 class="modal__title">Add new note</h2>
+							<button class="modal__close" data-modal="close">
+								<i class="fa-solid fa-xmark"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<script src="/bundle.js"></script>
+	</body>
+</html>
