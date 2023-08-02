@@ -3,6 +3,7 @@ import { service } from './db';
 import NoteList from './components/NotesList/NoteList.model';
 import CategoriesList from './components/CategoriesList/CategoriesList.model';
 import Notification from './components/Notification/Notification.model';
+import { NOTES } from './events/names';
 
 class App {
 	constructor() {
@@ -11,6 +12,7 @@ class App {
 		this.initialDataRequest();
 		this.notesListInit();
 		this.categoriesListInit();
+		this.notesListActions();
 	}
 
 	serviceInit() {
@@ -37,6 +39,21 @@ class App {
 		if (this.notesRoot) {
 			this.noteList = new NoteList(this.notesData, this.notesRoot);
 		}
+	}
+
+	notesListActions() {
+		this.noteList.events.subscribe(
+			NOTES.ARCHIVE_ALL,
+			this.categoriesDataReset.bind(this)
+		);
+	}
+
+	categoriesDataReset(data) {
+		this.notesData = data;
+		this.categoriesList.list.forEach((category) => {
+			category.remove();
+		});
+		this.categoriesListInit();
 	}
 
 	categoriesListInit() {

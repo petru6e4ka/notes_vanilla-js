@@ -35,7 +35,7 @@ export class NoteList {
 			if (this.list) {
 				const newNotes = this.service.notes.archiveAll();
 
-				this.events.emit(NOTES.ARCHIVE_ALL);
+				this.events.emit(NOTES.ARCHIVE_ALL, newNotes);
 				this.notifications.render({
 					text: 'Archived all',
 				});
