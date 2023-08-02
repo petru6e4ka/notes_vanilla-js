@@ -42,7 +42,7 @@ let notesData = [
 	},
 ];
 
-const categories = [
+const categoriesData = [
 	{
 		id: 1,
 		title: 'Task',
@@ -131,6 +131,13 @@ const notes = () => {
 	};
 };
 
+const categories = () => {
+	return {
+		getAll: () => categoriesData,
+	};
+};
+
 export const service = {
 	notes: notes(),
+	categories: categories(),
 };
