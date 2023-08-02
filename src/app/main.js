@@ -13,6 +13,7 @@ class App {
 		this.notesListInit();
 		this.categoriesListInit();
 		this.notesListActions();
+		this.noteActions();
 	}
 
 	serviceInit() {
@@ -50,6 +51,22 @@ class App {
 			NOTES.DELETE_ALL,
 			this.categoriesDataReset.bind(this)
 		);
+	}
+
+	noteActions() {
+		this.noteList.list.forEach((note) => {
+			note.events.subscribe(
+				NOTES.ARCHIVE_ID,
+				this.categoriesDataUpdate.bind(this)
+			);
+		});
+	}
+
+	categoriesDataUpdate(patch) {
+		const note = this.notesData.find((note) => note.id === patch.id);
+
+		Object.assign(note, patch);
+		this.categoriesDataReset(this.notesData);
 	}
 
 	categoriesDataReset(data) {

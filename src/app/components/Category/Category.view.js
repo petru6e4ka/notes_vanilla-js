@@ -1,7 +1,7 @@
 import icon from '../Icon/Icon.view';
 
 export const view = ({ title, id, active = 0, archived = 0 }) => {
-	//if (!active && !archived) return '';
+	if (!active && !archived) return '';
 
 	return `
     <article class="note" data-category=${id}>
