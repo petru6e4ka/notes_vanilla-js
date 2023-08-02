@@ -60,3 +60,77 @@ const categories = [
 		title: 'Quote',
 	},
 ];
+
+const notes = () => {
+	return {
+		getAll: () => notesData,
+
+		getById: (id) => {
+			const note = notesData.find((elem) => elem.id === id);
+
+			if (!note) {
+				throw Error('The id is invalid');
+			}
+
+			return note;
+		},
+
+		editById: (id, data) => {
+			const note = notesData.find((elem) => elem.id === id);
+
+			if (!note) {
+				throw Error('The id is invalid');
+			}
+
+			Object.assign(note, data);
+			return note;
+		},
+
+		deleteById: (id) => {
+			notesData = notesData.filter((elem) => elem.id !== id);
+
+			return notesData;
+		},
+
+		archiveById: (id) => {
+			const note = notesData.find((elem) => elem.id === id);
+
+			if (!note) {
+				throw Error('The id is invalid');
+			}
+
+			note.active = false;
+
+			return note;
+		},
+
+		deleteAll: () => {
+			notesData = [];
+
+			return notesData;
+		},
+
+		archiveAll: () => {
+			notesData.forEach((elem) => (elem.active = false));
+
+			return notesData;
+		},
+
+		addNew: (note) => {
+			const newNote = {
+				...note,
+				id: Date.now(),
+				createdDate: new Date().toISOString(),
+				active: true,
+			};
+
+			notesData.push(newNote);
+
+			return newNote;
+		},
+	};
+};
+
+export const service = {
+	notes: notes(),
+};
