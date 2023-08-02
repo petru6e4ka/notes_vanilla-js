@@ -46,6 +46,10 @@ class App {
 			NOTES.ARCHIVE_ALL,
 			this.categoriesDataReset.bind(this)
 		);
+		this.noteList.events.subscribe(
+			NOTES.DELETE_ALL,
+			this.categoriesDataReset.bind(this)
+		);
 	}
 
 	categoriesDataReset(data) {

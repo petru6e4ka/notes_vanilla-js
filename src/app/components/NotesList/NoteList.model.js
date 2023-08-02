@@ -17,6 +17,7 @@ export class NoteList {
 			return new Note(note, root, isActive);
 		});
 		this.archiveAllInit();
+		this.deleteAllInit();
 	}
 
 	archiveAllInit() {
@@ -46,10 +47,44 @@ export class NoteList {
 				});
 			}
 		} catch (error) {
-			console.log(error);
 			this.notifications.render({
 				status: 'error',
 				text: "Couldn't archive notes, please, try later",
+			});
+		}
+	}
+
+	deleteAllInit() {
+		this.deleteAllButton = document.querySelector("[data-delete='all']");
+
+		if (this.deleteAllButton) {
+			this.deleteAllButton.addEventListener(
+				'click',
+				this.onDeleteAll.bind(this)
+			);
+		}
+	}
+
+	onDeleteAll() {
+		try {
+			if (this.list) {
+				const newNotes = this.service.notes.deleteAll();
+
+				this.events.emit(NOTES.DELETE_ALL, newNotes);
+				this.notifications.render({
+					text: 'Deleted all',
+				});
+				this.list.forEach((note) => note.remove());
+				this.notes = newNotes;
+				this.list = this.notes.forEach((note) => {
+					new Note(note, this.root, this.isActive);
+				});
+			}
+		} catch (error) {
+			console.log(error);
+			this.notifications.render({
+				status: 'error',
+				text: "Couldn't delete notes, please, try later",
 			});
 		}
 	}
