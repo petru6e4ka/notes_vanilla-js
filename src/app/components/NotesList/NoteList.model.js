@@ -33,7 +33,7 @@ export class NoteList {
 
 	onArchiveAll() {
 		try {
-			if (this.list) {
+			if (this.list && this.isActive) {
 				const newNotes = this.service.notes.archiveAll();
 
 				this.events.emit(NOTES.ARCHIVE_ALL, newNotes);
