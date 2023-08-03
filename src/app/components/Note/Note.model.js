@@ -70,6 +70,8 @@ export class Note {
 			this.remove();
 			this.note = newNote;
 			this.view = view(this.note, this.isActive);
+			this.form?.remove();
+			this.form?.clear();
 		} catch (error) {
 			this.notifications.render({
 				status: 'error',
@@ -96,6 +98,8 @@ export class Note {
 			this.notifications.render({
 				text: 'Deleted Note',
 			});
+			this.form?.remove();
+			this.form?.clear();
 			this.remove();
 			this.clear();
 		} catch (error) {
@@ -173,7 +177,7 @@ export class Note {
 	}
 
 	clear() {
-		this.note = null;
+		this.note = {};
 		this.root = null;
 		this.isActive = null;
 		this.view = null;

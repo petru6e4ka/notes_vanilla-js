@@ -117,7 +117,7 @@ export class EditForm {
 	}
 
 	clear() {
-		this.note = null;
+		this.note = {};
 		this.root = null;
 		this.view = null;
 		this.service = null;

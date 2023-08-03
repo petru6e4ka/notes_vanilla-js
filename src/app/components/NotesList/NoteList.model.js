@@ -67,19 +67,14 @@ export class NoteList {
 
 	onDeleteAll() {
 		try {
-			if (this.list) {
-				const newNotes = this.service.notes.deleteAll();
+			const newNotes = this.service.notes.deleteAll();
 
-				this.events.emit(NOTES.DELETE_ALL, newNotes);
-				this.notifications.render({
-					text: 'Deleted all',
-				});
-				this.list.forEach((note) => note.remove());
-				this.notes = newNotes;
-				this.list = this.notes.forEach((note) => {
-					new Note(note, this.root, this.isActive);
-				});
-			}
+			this.events.emit(NOTES.DELETE_ALL, newNotes);
+			this.notifications.render({
+				text: 'Deleted all',
+			});
+			this.list?.forEach((note) => note.remove());
+			this.notes = newNotes;
 		} catch (error) {
 			this.notifications.render({
 				status: 'error',
