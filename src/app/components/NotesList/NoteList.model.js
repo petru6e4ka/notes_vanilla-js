@@ -81,7 +81,6 @@ export class NoteList {
 				});
 			}
 		} catch (error) {
-			console.log(error);
 			this.notifications.render({
 				status: 'error',
 				text: "Couldn't delete notes, please, try later",
