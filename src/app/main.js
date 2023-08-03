@@ -3,6 +3,7 @@ import { service } from './db';
 import NoteList from './components/NotesList/NoteList.model';
 import CategoriesList from './components/CategoriesList/CategoriesList.model';
 import Notification from './components/Notification/Notification.model';
+import Note from './components/Note/Note.model';
 import { NOTES } from './events/names';
 
 class App {
@@ -14,6 +15,8 @@ class App {
 		this.categoriesListInit();
 		this.notesListActions();
 		this.noteActions();
+		this.modalInit();
+		this.creatingNewInit();
 	}
 
 	serviceInit() {
@@ -109,6 +112,115 @@ class App {
 				(note) => !note.active && note.category === elem.title
 			).length,
 		}));
+	}
+
+	modalInit() {
+		const modal = document.querySelector('#portal');
+		const closeButton = document.querySelector('[data-modal="close"]');
+		const overlay = document.querySelector('#modal_overlay');
+		const modalContent = document.querySelector('#modal');
+
+		if (modal) {
+			this.modal = modal;
+		}
+
+		if (closeButton) {
+			this.closeModalButton = closeButton;
+			this.closeModalButton.addEventListener(
+				'click',
+				this.onCancelCreate.bind(this)
+			);
+		}
+
+		if (overlay) {
+			this.closeModalOverlay = overlay;
+			this.closeModalOverlay.addEventListener(
+				'click',
+				this.onCancelCreate.bind(this)
+			);
+		}
+
+		if (modalContent) {
+			this.modalContent = modalContent;
+			this.modalContent.addEventListener('click', (e) => e.stopPropagation());
+		}
+	}
+
+	creatingNewInit() {
+		const createButton = document.querySelector('[data-new="note"]');
+		const createNewNoteForm = document.querySelector('#new-note-form');
+
+		if (createButton) {
+			this.createButton = createButton;
+			this.createButton.addEventListener('click', this.onShowModal.bind(this));
+		}
+
+		if (createNewNoteForm) {
+			this.createNewNoteForm = createNewNoteForm;
+			this.createNewNoteForm.addEventListener(
+				'submit',
+				this.onCreate.bind(this)
+			);
+		}
+	}
+
+	onShowModal() {
+		this.modal.classList.remove('hidden');
+	}
+
+	onCancelCreate() {
+		this.modal.classList.add('hidden');
+		this.createNewNoteForm.reset();
+	}
+
+	onCreate(event) {
+		event.preventDefault();
+
+		const formData = new FormData(this.createNewNoteForm);
+		const title = formData.get('title');
+		const content = formData.get('content');
+		const category = formData.get('category');
+
+		if (title && content && category) {
+			this.onSaveCreated({ title, content, category });
+		}
+	}
+
+	onSaveCreated(note) {
+		try {
+			const newNote = this.service.notes.addNew(note);
+
+			this.notifications.render({
+				text: 'The new note is successfully created',
+			});
+			this.onCancelCreate();
+			this.categoriesDataReset(this.notesData);
+			this.onUpdateNotesList(newNote);
+		} catch (error) {
+			this.notifications.render({
+				status: 'error',
+				text: "Couldn't archive the note, please, try later",
+			});
+		}
+	}
+
+	onUpdateNotesList(newNote) {
+		const currentNote = new Note(newNote, this.notesRoot);
+		this.noteList.list.push(currentNote);
+		currentNote.events.subscribe(
+			NOTES.ARCHIVE_ID,
+			this.categoriesDataUpdate.bind(this)
+		);
+
+		currentNote.events.subscribe(
+			NOTES.DELETE_ID,
+			this.categoriesDataReset.bind(this)
+		);
+
+		currentNote.events.subscribe(
+			NOTES.SAVE_ID,
+			this.categoriesDataUpdate.bind(this)
+		);
 	}
 }
 
