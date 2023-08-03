@@ -1,8 +1,9 @@
-import { view } from './Note.view';
+import { view, cancelButtonView, editButtonView } from './Note.view';
 import EventEmitter from '../../events/emitter';
 import Notification from '../Notification/Notification.model';
 import { NOTES } from '../../events/names';
 import { service } from '../../db';
+import EditForm from '../EditForm/EditForm.model';
 
 export class Note {
 	constructor(note, root, isActive = true) {
@@ -24,10 +25,17 @@ export class Note {
 
 		this.archiveByIdInit();
 		this.deleteByIdInit();
+		this.editInit();
 	}
 
 	render() {
 		this.root.insertAdjacentHTML('afterbegin', this.view);
+
+		const element = document.querySelector(`[data-note="${this.note.id}"]`);
+
+		if (element) {
+			this.element = element;
+		}
 	}
 
 	remove() {
@@ -63,7 +71,6 @@ export class Note {
 			this.note = newNote;
 			this.view = view(this.note, this.isActive);
 		} catch (error) {
-			console.log(error);
 			this.notifications.render({
 				status: 'error',
 				text: "Couldn't archive the note, please, try later",
@@ -92,12 +99,77 @@ export class Note {
 			this.remove();
 			this.clear();
 		} catch (error) {
-			console.log(error);
 			this.notifications.render({
 				status: 'error',
 				text: "Couldn't archive the note, please, try later",
 			});
 		}
+	}
+
+	editInit() {
+		this.editButton = document.querySelector(`[data-edit='${this.note.id}']`);
+
+		if (this.editButton) {
+			this.editButton.addEventListener('click', this.onEdit.bind(this));
+		}
+	}
+
+	onEdit() {
+		this.form = new EditForm(this.note, this.element);
+		this.form.events.subscribe(NOTES.SAVE_ID, this.onSave.bind(this));
+		this.element.classList.add('note--active');
+
+		this.cancelEditInit();
+	}
+
+	cancelEditInit() {
+		this.editButton.remove();
+		this.archiveButton.insertAdjacentHTML(
+			'beforebegin',
+			cancelButtonView(this.note.id)
+		);
+
+		const cancelButton = this.element.querySelector(
+			`[data-cancel="${this.note.id}"]`
+		);
+
+		if (cancelButton) {
+			this.cancelButton = cancelButton;
+			this.cancelButton.addEventListener('click', this.onCancelEdit.bind(this));
+		}
+	}
+
+	onCancelEdit() {
+		this.element.classList.remove('note--active');
+		this.cancelButton.remove();
+		this.archiveButton.insertAdjacentHTML(
+			'beforebegin',
+			editButtonView(this.note.id)
+		);
+
+		const editButton = this.element.querySelector(
+			`[data-edit="${this.note.id}"]`
+		);
+
+		if (editButton) {
+			this.editButton = editButton;
+			this.editButton.addEventListener('click', this.onEdit.bind(this));
+		}
+
+		this.form.remove();
+		this.form.clear();
+	}
+
+	onSave(newNote) {
+		this.note = newNote;
+		this.view = view(this.note, this.isActive);
+
+		this.remove();
+		this.render();
+		this.archiveByIdInit();
+		this.deleteByIdInit();
+		this.editInit();
+		this.events.emit(NOTES.SAVE_ID, newNote);
 	}
 
 	clear() {
@@ -108,6 +180,7 @@ export class Note {
 		this.service = null;
 		this.events = null;
 		this.notifications = null;
+		this.element = null;
 
 		if (this.archiveButton) {
 			this.archiveButton.removeEventListener(
@@ -123,6 +196,11 @@ export class Note {
 				this.onDeleteById.bind(this)
 			);
 			this.deleteButton = null;
+		}
+
+		if (this.editButton) {
+			this.editButton.removeEventListener('click', this.onEdit.bind(this));
+			this.editButton = null;
 		}
 	}
 }

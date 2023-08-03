@@ -64,6 +64,11 @@ class App {
 				NOTES.DELETE_ID,
 				this.categoriesDataReset.bind(this)
 			);
+
+			note.events.subscribe(
+				NOTES.SAVE_ID,
+				this.categoriesDataUpdate.bind(this)
+			);
 		});
 	}
 

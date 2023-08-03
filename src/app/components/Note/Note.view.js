@@ -57,4 +57,16 @@ export const view = ({
   `;
 };
 
+export const cancelButtonView = (id) => `
+  <button class="button--outlined button--icon" data-cancel="${id}">
+  <i class="fa-solid fa-xmark" data-cancel="${id}"></i>
+  </button>
+`;
+
+export const editButtonView = (id) => `
+  <button class="button--outlined button--icon" data-edit="${id}">
+  <i class="fa-solid fa-pen-to-square" data-edit="${id}"></i>
+  </button>
+`;
+
 export default view;
