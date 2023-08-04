@@ -4,10 +4,10 @@ import icon from '../Icon/Icon.view';
 
 export const view = ({
 	id,
-	category,
-	title,
-	createdDate,
-	content,
+	category = '',
+	title = '',
+	createdDate = '',
+	content = '',
 	active,
 	isActive = true,
 }) => {
@@ -25,7 +25,7 @@ export const view = ({
       </button>
     `
 			: `
-      <button class="button--outlined button--icon" data-archive="${id}">
+      <button class="button--outlined button--icon" data-unarchive="${id}">
         <i class="fa-solid fa-upload" data-unarchive="${id}"></i>
       </button>
     `;
@@ -50,6 +50,7 @@ export const view = ({
 			).join(', ')}</div>
       <div
         class="note__actions table__col table__col--min table__actions"
+        data-note-actions="${id}"
       >
         ${activeButtons}
       </div>

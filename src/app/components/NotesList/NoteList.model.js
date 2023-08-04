@@ -40,11 +40,10 @@ export class NoteList {
 				this.notifications.render({
 					text: 'Archived all',
 				});
-				this.list.forEach((note) => note.remove());
-				this.notes = newNotes;
-				this.list = this.notes.forEach((note) => {
-					new Note(note, this.root, this.isActive);
+				this.list.forEach((note) => {
+					note.remove();
 				});
+				this.notes = newNotes;
 			}
 		} catch (error) {
 			this.notifications.render({
@@ -73,7 +72,10 @@ export class NoteList {
 			this.notifications.render({
 				text: 'Deleted all',
 			});
-			this.list?.forEach((note) => note.remove());
+			this.list?.forEach((note) => {
+				note.remove();
+				note.clear();
+			});
 			this.notes = newNotes;
 		} catch (error) {
 			this.notifications.render({
@@ -81,6 +83,26 @@ export class NoteList {
 				text: "Couldn't delete notes, please, try later",
 			});
 		}
+	}
+
+	filterActive() {
+		this.list.map((elem) => {
+			elem.remove();
+			elem.isActive = true;
+			elem.form?.remove();
+			elem.form?.clear();
+			elem.update(true);
+		});
+	}
+
+	filterArchived() {
+		this.list.map((elem) => {
+			elem.remove();
+			elem.isActive = false;
+			elem.form?.remove();
+			elem.form?.clear();
+			elem.update(false);
+		});
 	}
 }
 

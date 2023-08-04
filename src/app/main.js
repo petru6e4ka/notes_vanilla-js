@@ -9,7 +9,7 @@ import { NOTES } from './events/names';
 class App {
 	constructor() {
 		this.notifications = new Notification();
-		this.serviceInit();
+		this.service = service;
 		this.initialDataRequest();
 		this.notesListInit();
 		this.categoriesListInit();
@@ -17,10 +17,7 @@ class App {
 		this.noteActions();
 		this.modalInit();
 		this.creatingNewInit();
-	}
-
-	serviceInit() {
-		this.service = service;
+		this.toggleArchivedInit();
 	}
 
 	initialDataRequest() {
@@ -205,7 +202,12 @@ class App {
 	}
 
 	onUpdateNotesList(newNote) {
-		const currentNote = new Note(newNote, this.notesRoot);
+		const currentNote = new Note(
+			newNote,
+			this.notesRoot,
+			this.isActiveNoteShow
+		);
+
 		this.noteList.list.push(currentNote);
 		currentNote.events.subscribe(
 			NOTES.ARCHIVE_ID,
@@ -221,6 +223,40 @@ class App {
 			NOTES.SAVE_ID,
 			this.categoriesDataUpdate.bind(this)
 		);
+	}
+
+	toggleArchivedInit() {
+		this.isActiveNoteShow = true;
+
+		const checkButton = document.querySelector('[data-archived="show"]');
+
+		if (checkButton) {
+			this.checkButton = checkButton;
+			this.checkButton.addEventListener(
+				'click',
+				this.onToggleArchived.bind(this)
+			);
+		}
+	}
+
+	onToggleArchived() {
+		const current = this.checkButton.getAttribute('data-archived');
+
+		if (current === 'show') {
+			this.isActiveNoteShow = false;
+			this.checkButton.setAttribute('data-archived', 'hide');
+			this.checkButton.textContent = 'Hide Archived';
+			this.noteList.isActive = false;
+			this.noteList.filterArchived();
+		}
+
+		if (current === 'hide') {
+			this.isActiveNoteShow = true;
+			this.checkButton.setAttribute('data-archived', 'show');
+			this.checkButton.textContent = 'Show Archived';
+			this.noteList.isActive = true;
+			this.noteList.filterActive();
+		}
 	}
 }
 

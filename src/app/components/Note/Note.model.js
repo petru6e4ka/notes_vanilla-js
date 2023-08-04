@@ -10,32 +10,40 @@ export class Note {
 		this.note = note;
 		this.root = root;
 		this.isActive = isActive;
-		this.view = view(this.note, isActive);
 		this.service = service;
 		this.events = new EventEmitter();
 		this.notifications = new Notification();
 
 		if (isActive && note.active) {
 			this.render();
+			return;
 		}
 
 		if (!isActive && !note.active) {
 			this.render();
+			return;
+		}
+
+		this.remove();
+	}
+
+	render() {
+		this.view = view(this.note, this.isActive);
+
+		if (this.root && this.view && this.isActive === this.note.active) {
+			this.root.insertAdjacentHTML('afterbegin', this.view);
+
+			const element = document.querySelector(`[data-note="${this.note.id}"]`);
+
+			if (element) {
+				this.element = element;
+			}
 		}
 
 		this.archiveByIdInit();
 		this.deleteByIdInit();
 		this.editInit();
-	}
-
-	render() {
-		this.root.insertAdjacentHTML('afterbegin', this.view);
-
-		const element = document.querySelector(`[data-note="${this.note.id}"]`);
-
-		if (element) {
-			this.element = element;
-		}
+		this.unArchiveInit();
 	}
 
 	remove() {
@@ -69,7 +77,6 @@ export class Note {
 			});
 			this.remove();
 			this.note = newNote;
-			this.view = view(this.note, this.isActive);
 			this.form?.remove();
 			this.form?.clear();
 		} catch (error) {
@@ -170,9 +177,7 @@ export class Note {
 
 		this.remove();
 		this.render();
-		this.archiveByIdInit();
-		this.deleteByIdInit();
-		this.editInit();
+
 		this.events.emit(NOTES.SAVE_ID, newNote);
 	}
 
@@ -205,6 +210,66 @@ export class Note {
 		if (this.editButton) {
 			this.editButton.removeEventListener('click', this.onEdit.bind(this));
 			this.editButton = null;
+		}
+
+		if (this.editButton) {
+			this.editButton.removeEventListener('click', this.onEdit.bind(this));
+			this.editButton = null;
+		}
+
+		if (this.unArchiveButton) {
+			this.unArchiveButton.removeEventListener(
+				'click',
+				this.onUnarchiveById.bind(this)
+			);
+			this.unArchiveButton = null;
+		}
+	}
+
+	update(isActive) {
+		this.isActive = isActive;
+
+		if (isActive && this.note.active) {
+			this.render();
+			return;
+		}
+
+		if (!isActive && !this.note.active) {
+			this.render();
+			return;
+		}
+
+		this.remove();
+	}
+
+	unArchiveInit() {
+		this.unArchiveButton = document.querySelector(
+			`[data-unarchive='${this.note.id}']`
+		);
+
+		if (this.unArchiveButton) {
+			this.unArchiveButton.addEventListener(
+				'click',
+				this.onUnarchiveById.bind(this)
+			);
+		}
+	}
+
+	onUnarchiveById() {
+		try {
+			const newNote = this.service.notes.unArchiveById(this.note.id);
+
+			this.events.emit(NOTES.ARCHIVE_ID, newNote);
+			this.notifications.render({
+				text: 'Unarchived Note',
+			});
+			this.remove();
+			this.note = newNote;
+		} catch (error) {
+			this.notifications.render({
+				status: 'error',
+				text: "Couldn't unarchive the note, please, try later",
+			});
 		}
 	}
 }
