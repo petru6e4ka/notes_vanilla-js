@@ -6,5 +6,4 @@ export const NOTES = {
 	DELETE_ID: 'DELETE_ID',
 	CANCEL_ID: 'CANCEL_ID',
 	SAVE_ID: 'SAVE_ID',
-	CREATE_NEW: 'CREATE_NEW',
 };
