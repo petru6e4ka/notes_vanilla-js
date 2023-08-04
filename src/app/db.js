@@ -112,6 +112,18 @@ const notes = () => {
 			return note;
 		},
 
+		unArchiveById: (id) => {
+			const note = notesData.find((elem) => elem.id === id);
+
+			if (!note) {
+				throw Error('The id is invalid');
+			}
+
+			note.active = true;
+
+			return note;
+		},
+
 		deleteAll: () => {
 			notesData = [];
 
